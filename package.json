@@ -1,28 +1,21 @@
 {
   "name": "hubot-archive",
   "description": "A hubot script that archives every conversation the hubot sees.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Fabian Bull <fabian.bull@datameer.com>",
   "license": "MIT",
-
   "keywords": "hubot, hubot-scripts, archive",
-
   "repository": {
     "type": "git",
     "url": "git://github.com/peri4n/hubot-archive.git"
   },
-
   "bugs": {
     "url": "https://github.com/peri4n/hubot-archive/issues"
   },
-
-  "dependencies": {
-  },
-
+  "dependencies": {},
   "peerDependencies": {
     "hubot": "2.x"
   },
-
   "devDependencies": {
     "chai": "^2.1.1",
     "coffee-script": "1.6.3",
@@ -37,9 +30,7 @@
     "sinon": "^1.13.0",
     "sinon-chai": "^2.7.0"
   },
-
   "main": "index.coffee",
-
   "scripts": {
     "test": "grunt test"
   }
