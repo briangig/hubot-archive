@@ -21,6 +21,6 @@ Then add **hubot-archive** to your `external-scripts.json`:
 ## Sample Interaction
 
 ```
-user1>> hubot hello
-hubot>> hello!
+user1>> hubot channel count <channel> - Retuns the number of messages logged in the database for a particular channel
+user1>> hubot channel mentions <phrase> - Returns logged messages containing the specified phrase
 ```

@@ -9,11 +9,11 @@
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-archive.git"
+    "url": "git://github.com/peri4n/hubot-archive.git"
   },
 
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-archive/issues"
+    "url": "https://github.com/peri4n/hubot-archive/issues"
   },
 
   "dependencies": {
