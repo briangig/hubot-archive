@@ -1,7 +1,7 @@
 {
   "name": "hubot-archive",
   "description": "A hubot script that archives every conversation the hubot sees.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Fabian Bull <fabian.bull@datameer.com>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts, archive",
