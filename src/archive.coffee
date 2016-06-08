@@ -20,9 +20,9 @@ module.exports = (robot) ->
 
   ELASTICSEARCH_HOST = "http://localhost"
   if(process.env.ELASTICSEARCH_HOST?)
-    ELASTICSEARCH_HOST = process.env.ELASTICSEARCH_HOST
+    ELASTICSEARCH_HOST = "http://" + process.env.ELASTICSEARCH_HOST
 
-  ELASTICSEARCH_PORT = 9200
+  ELASTICSEARCH_PORT = ""
   if(process.env.ELASTICSEARCH_PORT?)
      ELASTICSEARCH_PORT = process.env.ELASTICSEARCH_PORT
 
@@ -32,13 +32,25 @@ module.exports = (robot) ->
 
   ELASTICSEARCH_CLUSTER = "#{ELASTICSEARCH_HOST}:#{ELASTICSEARCH_PORT}"
 
+# check status of elastic search end point
+  robot.hear /channel status/i, (res) ->
+    robot.http("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/_cat/indices?v")
+    .put(JSON.stringify(res.message)) (err, response, body) ->
+      if err
+        res.send("Something went terribly wrong: (#{err})")
+      else
+        res.send("Everything went well.")
+
   # listen to everything
   robot.hear /.*/i, (res) ->
     robot.http("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/#{res.message.room}/#{res.message.id}?pretty")
-    .header('Content-Type', 'application/json')
-    .header('Accept', 'application/json')
     .put(JSON.stringify(res.message)) (err, response, body) ->
-      console.log("Logged message from #{res.message.user.name} in #{res.message.room} with id #{res.message.id}.")
+      console.log(JSON.stringify(res.message))
+      console.log("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/#{res.message.room}/#{res.message.id}?pretty")
+      if err
+        res.send("Can not backup chat: (#{err})")
+      else
+        console.log("Logged message from #{res.message.user.name} in #{res.message.room} with id #{res.message.id}.")
 
 
   # ask hubot how many messages are recorded for a particular channel
@@ -55,8 +67,7 @@ module.exports = (robot) ->
       .header('Content-Type', 'application/json')
       .header('Accept', 'application/json')
       .post(query) (err, response, body) ->
-        parsedBody = JSON.parse(body)
-        res.send(parsedBody.hits.total)
+        res.send(JSON.parse(body).hits.total)
         console.log("Channel count command fired for channel #{res.match[1]}.")
 
   # ask hubot to for messages containing a certain string
@@ -74,5 +85,5 @@ module.exports = (robot) ->
       .header('Content-Type', 'application/json')
       .header('Accept', 'application/json')
       .post(query) (err, response, body) ->
-        JSON.parse(body).hits.hits.map((hit) => res.send(hit._source.rawText));
+        JSON.parse(body).hits.hits.map((hit) => res.send(hit._source.rawText))
         console.log("Channel mentions command fired for string #{res.match[1]}.")
