@@ -45,8 +45,6 @@ module.exports = (robot) ->
   robot.hear /.*/i, (res) ->
     robot.http("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/#{res.message.room}/#{res.message.id}?pretty")
     .put(JSON.stringify(res.message)) (err, response, body) ->
-      console.log(JSON.stringify(res.message))
-      console.log("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/#{res.message.room}/#{res.message.id}?pretty")
       if err
         res.send("Can not backup chat: (#{err})")
       else
@@ -82,8 +80,8 @@ module.exports = (robot) ->
     })
 
     robot.http("#{ELASTICSEARCH_CLUSTER}/#{ELASTICSEARCH_INDEX}/_search?pretty")
-      .header('Content-Type', 'application/json')
-      .header('Accept', 'application/json')
       .post(query) (err, response, body) ->
-        JSON.parse(body).hits.hits.map((hit) => res.send(hit._source.rawText))
-        console.log("Channel mentions command fired for string #{res.match[1]}.")
+        if err
+          res.send("Can not retrieve backups: (#{err})")
+        else
+          JSON.parse(body).hits.hits.map((hit) => res.send(hit._source.rawText))
